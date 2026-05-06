@@ -1,0 +1,113 @@
+<!DOCTYPE html>
+<html lang="pt-BR">
+
+<head>
+  <meta charset="UTF-8"/>
+  <meta name="viewport" content="width=device-width, initial-scale=1.0"/>
+
+  <title>WebMap Amazonas</title>
+
+  <!-- LEAFLET -->
+  <link
+    rel="stylesheet"
+    href="https://unpkg.com/leaflet@1.9.4/dist/leaflet.css"
+  />
+
+  <script src="https://unpkg.com/leaflet@1.9.4/dist/leaflet.js"></script>
+
+  <!-- FlatGeobuf -->
+  <script src="https://unpkg.com/flatgeobuf@3.30.0/dist/flatgeobuf-geojson.min.js"></script>
+
+  <!-- Chart.js -->
+  <script src="https://cdnjs.cloudflare.com/ajax/libs/Chart.js/4.4.1/chart.umd.min.js"></script>
+
+  <link rel="stylesheet" href="css/style.css"/>
+</head>
+
+<body>
+
+  <!-- SIDEBAR -->
+  <div id="sidebar">
+
+    <div id="sidebar-header">
+      <div class="brand">
+        <span class="brand-icon">🌿</span>
+
+        <div>
+          <h1>WebMap</h1>
+          <span>Estado do Amazonas</span>
+        </div>
+      </div>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="section-label">CAMADAS</p>
+
+      <div id="layer-controls"></div>
+    </div>
+
+    <div class="sidebar-section">
+      <p class="section-label">BASEMAP</p>
+
+      <div id="basemap-controls">
+
+        <button
+          class="basemap-btn active"
+          onclick="setBasemap('streets', this)"
+        >
+          Ruas
+        </button>
+
+        <button
+          class="basemap-btn"
+          onclick="setBasemap('satellite', this)"
+        >
+          Satélite
+        </button>
+
+        <button
+          class="basemap-btn"
+          onclick="setBasemap('dark', this)"
+        >
+          Escuro
+        </button>
+
+      </div>
+    </div>
+
+  </div>
+
+  <!-- MAPA -->
+  <div id="map"></div>
+
+  <!-- DASHBOARD -->
+  <div id="dashboard">
+
+    <div id="dashboard-header">
+      <h2>Dashboard</h2>
+
+      <button id="dash-toggle" onclick="toggleDashboard()">
+        ✕
+      </button>
+    </div>
+
+    <div id="kpi-grid"></div>
+
+    <div class="chart-block">
+      <p class="section-label">DISTRIBUIÇÃO POR CAMADA</p>
+      <canvas id="chart-dist"></canvas>
+    </div>
+
+    <div class="chart-block">
+      <p class="section-label">ÁREA (km²)</p>
+      <canvas id="chart-area"></canvas>
+    </div>
+
+  </div>
+
+  <script src="js/map.js"></script>
+  <script src="js/layers.js"></script>
+  <script src="js/dashboard.js"></script>
+
+</body>
+</html>
