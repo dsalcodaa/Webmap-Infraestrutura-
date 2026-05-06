@@ -1,660 +1,301 @@
-/* =====================================================
-   layers.js — Leaflet + FlatGeobuf
-   WebMap Amazonas
-   ===================================================== */
-
-// =====================================================
-// CONFIGURAÇÃO DAS CAMADAS
-// =====================================================
-
+// Configuração das camadas com nomes de arquivos exatos (maiúsculas, acentos e espaços)
 const LAYER_CONFIG = [
-
-  // =====================================================
-  // LIMITES
-  // =====================================================
-
   {
     id: 'uf_am',
     name: 'Amazonas',
-    file: 'data/am_uf_2022.fgb',
-    type: 'fill',
-    color: '#1e88e5',
-    opacity: 0.08,
-    outlineColor: '#1e88e5',
-    outlineWidth: 2,
-    visible: true,
-    icon: '🗺️',
-    popupFields: ['NM_UF']
+    file: 'data/AM_UF 2022.fgb',
+    type: 'polygon',
+    color: '#2c7fb8',
+    weight: 2,
+    fillOpacity: 0.4,
+    popupFields: ['NM_UF', 'SIGLA', 'AREA_KM2']
   },
-
   {
     id: 'municipios',
     name: 'Municípios',
-    file: 'data/am_municipios_2024.fgb',
-    type: 'fill',
-    color: '#42a5f5',
-    opacity: 0.12,
-    outlineColor: '#1565c0',
-    outlineWidth: 1,
-    visible: true,
-    icon: '🏙️',
-    popupFields: ['NM_MUN', 'CD_MUN']
+    file: 'data/AM_MUNICÍPIOS 2024.fgb',
+    type: 'polygon',
+    color: '#3ecf8e',
+    weight: 1.2,
+    fillOpacity: 0.3,
+    popupFields: ['NM_MUN', 'CD_IBGE', 'AREA_KM2']
   },
-
   {
-    id: 'regioes_imediatas',
+    id: 'rg_imediatas',
     name: 'Regiões Imediatas',
-    file: 'data/am_rg_imediatas_2024.fgb',
-    type: 'fill',
-    color: '#7e57c2',
-    opacity: 0.08,
-    outlineColor: '#5e35b1',
-    outlineWidth: 1,
-    visible: false,
-    icon: '📍',
-    popupFields: ['NM_RGI']
+    file: 'data/AM_RG_IMEDIATAS 2024.fgb',
+    type: 'polygon',
+    color: '#f9a65a',
+    weight: 1.2,
+    fillOpacity: 0.25,
+    popupFields: ['NM_RG_I', 'CD_RG_I']
   },
-
   {
-    id: 'regioes_intermediarias',
+    id: 'rg_intermediarias',
     name: 'Regiões Intermediárias',
-    file: 'data/am_rg_intermediarias_2024.fgb',
-    type: 'fill',
-    color: '#8e24aa',
-    opacity: 0.08,
-    outlineColor: '#6a1b9a',
-    outlineWidth: 1,
-    visible: false,
-    icon: '🌐',
-    popupFields: ['NM_RGI']
+    file: 'data/AM_RG_INTERMEDIARIAS 2024.fgb',
+    type: 'polygon',
+    color: '#e07b39',
+    weight: 1.5,
+    fillOpacity: 0.2,
+    popupFields: ['NM_RG_I', 'CD_RG_I']
   },
-
   {
     id: 'regiao_metropolitana',
     name: 'Região Metropolitana',
-    file: 'data/am_regiao_metropolitana.fgb',
-    type: 'fill',
-    color: '#ef5350',
-    opacity: 0.12,
-    outlineColor: '#c62828',
-    outlineWidth: 2,
-    visible: false,
-    icon: '🏢',
-    popupFields: ['NOME']
+    file: 'data/AM_REGIÃO METROPOLITANA.fgb',
+    type: 'polygon',
+    color: '#9b59b6',
+    weight: 1.5,
+    fillOpacity: 0.3,
+    popupFields: ['NM_RM', 'SIGLA']
   },
-
   {
     id: 'regional_calhas',
     name: 'Regional Calhas',
-    file: 'data/am_regional_calhas.fgb',
-    type: 'fill',
-    color: '#26a69a',
-    opacity: 0.10,
-    outlineColor: '#00897b',
-    outlineWidth: 1,
-    visible: false,
-    icon: '🌎',
-    popupFields: ['NOME']
+    file: 'data/AM_REGIONAL CALHAS.fgb',
+    type: 'polygon',
+    color: '#1abc9c',
+    weight: 1.2,
+    fillOpacity: 0.25,
+    popupFields: ['NM_REGIAO', 'CD_REGIAO']
   },
-
-  // =====================================================
-  // HIDROGRAFIA
-  // =====================================================
-
   {
     id: 'rios',
     name: 'Rios do Amazonas',
-    file: 'data/rios_do_amazonas.fgb',
+    file: 'data/RIOS DO AMAZONAS.fgb',
     type: 'line',
-    color: '#29b6f6',
-    opacity: 0.9,
-    lineWidth: 1.2,
-    visible: true,
-    icon: '🌊',
-    popupFields: ['NOME']
+    color: '#3498db',
+    weight: 1.8,
+    fillOpacity: 0,
+    popupFields: ['NM_RIO', 'LENGTH_KM']
   },
-
   {
     id: 'hidrovias',
     name: 'Hidrovias',
-    file: 'data/hidrovias_am.fgb',
+    file: 'data/HIDROVIAS AM.fgb',
     type: 'line',
-    color: '#00acc1',
-    opacity: 0.9,
-    lineWidth: 2,
-    visible: false,
-    icon: '🚢',
-    popupFields: ['NOME']
+    color: '#5dade2',
+    weight: 2,
+    fillOpacity: 0,
+    popupFields: ['NM_HIDROVIA', 'EXTENSAO']
   },
-
-  // =====================================================
-  // RODOVIAS
-  // =====================================================
-
   {
     id: 'rodovias_estaduais',
     name: 'Rodovias Estaduais',
-    file: 'data/rodovias_estaduais_am.fgb',
+    file: 'data/RODOVIAS ESTADUAIS AM.fgb',
     type: 'line',
-    color: '#fb8c00',
-    opacity: 0.95,
-    lineWidth: 2,
-    visible: true,
-    icon: '🛣️',
-    popupFields: ['RODOVIA', 'SITUACAO']
+    color: '#f1c40f',
+    weight: 2,
+    fillOpacity: 0,
+    popupFields: ['RODOVIA', 'CODIGO', 'EXTENSAO']
   },
-
   {
     id: 'rodovias_federais',
     name: 'Rodovias Federais',
-    file: 'data/rodovias_federais_am.fgb',
+    file: 'data/RODOVAIS FEDERAIS AM.fgb',
     type: 'line',
-    color: '#e53935',
-    opacity: 0.95,
-    lineWidth: 2.5,
-    visible: true,
-    icon: '🚧',
-    popupFields: ['BR']
+    color: '#e67e22',
+    weight: 2.2,
+    fillOpacity: 0,
+    popupFields: ['BR', 'NOME', 'EXTENSAO']
   },
-
   {
     id: 'estradas_vicinais',
     name: 'Estradas Vicinais',
-    file: 'data/estradas_vicinais.fgb',
+    file: 'data/ESTRADAS VICINAIS.fgb',
     type: 'line',
-    color: '#8d6e63',
-    opacity: 0.8,
-    lineWidth: 1,
-    visible: false,
-    icon: '🛤️',
-    popupFields: ['NOME']
+    color: '#d35400',
+    weight: 1.2,
+    fillOpacity: 0,
+    popupFields: ['NOME', 'TIPO']
   },
-
   {
-    id: 'marcos_km',
+    id: 'marcos_quilometricos',
     name: 'Marcos Quilométricos',
-    file: 'data/marco_quilometrico_rodovias_estaduais.fgb',
-    type: 'circle',
-    color: '#ffeb3b',
-    opacity: 0.9,
-    visible: false,
-    icon: '📍',
-    popupFields: ['RODOVIA', 'KM']
+    file: 'data/MARCO QUILOMETRICO RODOVIAS ESTADUAIS.fgb',
+    type: 'point',
+    color: '#f39c12',
+    radius: 5,
+    popupFields: ['RODOVIA', 'KM', 'LADO']
   },
-
-  // =====================================================
-  // LOGÍSTICA
-  // =====================================================
-
   {
     id: 'portos',
     name: 'Portos',
-    file: 'data/portos_antaq_am.fgb',
-    type: 'circle',
-    color: '#3949ab',
-    opacity: 0.9,
-    visible: true,
-    icon: '⚓',
-    popupFields: ['NOME']
+    file: 'data/PORTOS ANTAQ - AM.fgb',
+    type: 'point',
+    color: '#16a085',
+    radius: 6,
+    popupFields: ['PORTO', 'MUNICIPIO', 'TIPO']
   },
-
   {
     id: 'aeroportos',
     name: 'Aeroportos',
-    file: 'data/aeroportos_e_aerodromos_publicos_am.fgb',
-    type: 'circle',
-    color: '#43a047',
-    opacity: 0.9,
-    visible: true,
-    icon: '✈️',
-    popupFields: ['NOME']
+    file: 'data/AEROPORTOS E AERODROMOS PUBLICOS AM.fgb',
+    type: 'point',
+    color: '#e74c3c',
+    radius: 5,
+    popupFields: ['NOME', 'MUNICIPIO', 'COD_OACI']
   },
-
   {
     id: 'sedes_municipais',
     name: 'Sedes Municipais',
-    file: 'data/am_sedes_municipais.fgb',
-    type: 'circle',
-    color: '#f4511e',
-    opacity: 0.95,
-    visible: true,
-    icon: '🏠',
-    popupFields: ['NM_MUN']
+    file: 'data/AM_SEDES MUNICIPAIS.fgb',
+    type: 'point',
+    color: '#8e44ad',
+    radius: 5,
+    popupFields: ['MUNICIPIO', 'POPULACAO', 'LAT', 'LON']
   }
-
 ];
 
-// =====================================================
-// ESTADO GLOBAL
-// =====================================================
+// Variável global para armazenar as camadas carregadas
+let loadedLayers = {};
 
-const LOADED_DATA = {};
-const MAP_LAYERS = {};
-
-let firstLayerLoaded = false;
-
-// =====================================================
-// INICIALIZAÇÃO
-// =====================================================
-
-function initLayers() {
-
-  buildLayerControls();
-
-  LAYER_CONFIG.forEach(cfg => {
-    loadFgb(cfg);
-  });
-
-}
-
-// =====================================================
-// CONTROLES
-// =====================================================
-
-function buildLayerControls() {
-
-  const container =
-    document.getElementById('layer-controls');
-
-  if (!container) return;
-
-  container.innerHTML = '';
-
-  LAYER_CONFIG.forEach(cfg => {
-
-    const item = document.createElement('div');
-
-    item.className = 'layer-item';
-
-    item.innerHTML = `
-      <input
-        type="checkbox"
-        class="layer-toggle"
-        ${cfg.visible ? 'checked' : ''}
-      />
-
-      <div
-        class="layer-dot"
-        style="background:${cfg.color}"
-      ></div>
-
-      <div class="layer-name">
-        ${cfg.icon} ${cfg.name}
-      </div>
-    `;
-
-    const checkbox =
-      item.querySelector('input');
-
-    checkbox.addEventListener('change', e => {
-
-      toggleLayer(
-        cfg.id,
-        e.target.checked
-      );
-
-    });
-
-    container.appendChild(item);
-
-  });
-
-}
-
-// =====================================================
-// TOGGLE
-// =====================================================
-
-function toggleLayer(id, visible) {
-
-  const layer = MAP_LAYERS[id];
-
-  if (!layer) return;
-
-  if (visible) {
-
-    if (!map.hasLayer(layer)) {
-
-      map.addLayer(layer);
-
-    }
-
-  } else {
-
-    if (map.hasLayer(layer)) {
-
-      map.removeLayer(layer);
-
-    }
-
-  }
-
-  const cfg =
-    LAYER_CONFIG.find(c => c.id === id);
-
-  if (cfg) {
-
-    cfg.visible = visible;
-
-  }
-
-  if (typeof updateDashboard === 'function') {
-
-    updateDashboard();
-
-  }
-
-}
-
-// =====================================================
-// CARREGAMENTO FGB
-// =====================================================
-
-async function loadFgb(cfg) {
-
+// Função para carregar uma camada FlatGeobuf
+async function loadFlatGeobufLayer(config, isVisible) {
+  const url = config.file;
   try {
-
-    console.log('Carregando:', cfg.file);
-
-    const response =
-      await fetch(cfg.file);
-
-    if (!response.ok) {
-
-      throw new Error(
-        `Erro HTTP ${response.status}`
-      );
-
-    }
-
-    const arrayBuffer =
-      await response.arrayBuffer();
-
-    const features = [];
-
-    // =====================================================
-    // FlatGeobuf
-    // =====================================================
-
-    for await (
-      const feature of flatgeobuf.deserialize(arrayBuffer)
-    ) {
-
-      if (!feature?.geometry) continue;
-
-      features.push({
-        type: 'Feature',
-        geometry: feature.geometry,
-        properties: feature.properties || {}
+    const response = await fetch(url);
+    if (!response.ok) throw new Error(`HTTP ${response.status}`);
+    const arrayBuffer = await response.arrayBuffer();
+    const geojson = flatgeobuf.deserialize(arrayBuffer);
+    
+    let layer;
+    if (config.type === 'polygon') {
+      layer = L.geoJSON(geojson, {
+        style: {
+          color: config.color,
+          weight: config.weight,
+          fillOpacity: config.fillOpacity,
+          fillColor: config.color
+        },
+        onEachFeature: (feature, layer) => {
+          if (config.popupFields && feature.properties) {
+            let popupContent = `<div class="popup-title">${config.name}</div>`;
+            config.popupFields.forEach(field => {
+              const val = feature.properties[field] || '—';
+              popupContent += `<div class="popup-row"><span class="popup-key">${field}:</span><span class="popup-val">${val}</span></div>`;
+            });
+            layer.bindPopup(popupContent);
+          }
+        }
       });
-
+    } else if (config.type === 'line') {
+      layer = L.geoJSON(geojson, {
+        style: {
+          color: config.color,
+          weight: config.weight
+        },
+        onEachFeature: (feature, layer) => {
+          if (config.popupFields && feature.properties) {
+            let popupContent = `<div class="popup-title">${config.name}</div>`;
+            config.popupFields.forEach(field => {
+              const val = feature.properties[field] || '—';
+              popupContent += `<div class="popup-row"><span class="popup-key">${field}:</span><span class="popup-val">${val}</span></div>`;
+            });
+            layer.bindPopup(popupContent);
+          }
+        }
+      });
+    } else if (config.type === 'point') {
+      layer = L.geoJSON(geojson, {
+        pointToLayer: (feature, latlng) => {
+          return L.circleMarker(latlng, {
+            radius: config.radius || 5,
+            fillColor: config.color,
+            color: '#fff',
+            weight: 1,
+            opacity: 1,
+            fillOpacity: 0.8
+          });
+        },
+        onEachFeature: (feature, layer) => {
+          if (config.popupFields && feature.properties) {
+            let popupContent = `<div class="popup-title">${config.name}</div>`;
+            config.popupFields.forEach(field => {
+              const val = feature.properties[field] || '—';
+              popupContent += `<div class="popup-row"><span class="popup-key">${field}:</span><span class="popup-val">${val}</span></div>`;
+            });
+            layer.bindPopup(popupContent);
+          }
+        }
+      });
     }
-
-    console.log(
-      `${cfg.name}:`,
-      features.length,
-      'feições'
-    );
-
-    // DEBUG
-
-    if (features.length > 0) {
-
-      console.log(
-        'Primeira feição:',
-        features[0]
-      );
-
-    }
-
-    const geojson = {
-
-      type: 'FeatureCollection',
-
-      features
-
-    };
-
-    LOADED_DATA[cfg.id] = geojson;
-
-    addLayerToMap(cfg, geojson);
-
-    if (typeof updateDashboard === 'function') {
-
-      updateDashboard();
-
-    }
-
-  } catch (err) {
-
-    console.error(
-      `Erro ao carregar ${cfg.name}:`,
-      err
-    );
-
+    
+    loadedLayers[config.id] = layer;
+    if (isVisible) layer.addTo(map);
+    return layer;
+  } catch (error) {
+    console.error(`Erro ao carregar ${config.name}:`, error);
+    return null;
   }
-
 }
 
-// =====================================================
-// ADICIONAR AO MAPA
-// =====================================================
-
-function addLayerToMap(cfg, geojson) {
-
-  const layer = L.geoJSON(geojson, {
-
-    // =====================================================
-    // ESTILOS
-    // =====================================================
-
-    style: function(feature) {
-
-      const geom =
-        feature.geometry.type;
-
-      // POLÍGONOS
-
-      if (
-        geom === 'Polygon' ||
-        geom === 'MultiPolygon'
-      ) {
-
-        return {
-
-          color:
-            cfg.outlineColor || cfg.color,
-
-          weight:
-            cfg.outlineWidth || 1,
-
-          fillColor:
-            cfg.color,
-
-          fillOpacity:
-            cfg.opacity || 0.3
-
-        };
-
-      }
-
-      // LINHAS
-
-      return {
-
-        color: cfg.color,
-
-        weight:
-          cfg.lineWidth || 2,
-
-        opacity:
-          cfg.opacity || 1
-
-      };
-
-    },
-
-    // =====================================================
-    // PONTOS
-    // =====================================================
-
-    pointToLayer:
-      function(feature, latlng) {
-
-      return L.circleMarker(latlng, {
-
-        radius: 5,
-
-        fillColor: cfg.color,
-
-        color: '#ffffff',
-
-        weight: 1,
-
-        opacity: 1,
-
-        fillOpacity:
-          cfg.opacity || 1
-
-      });
-
-    },
-
-    // =====================================================
-    // EVENTOS
-    // =====================================================
-
-    onEachFeature:
-      function(feature, layer) {
-
-      bindLayerEvents(
-        cfg,
-        feature,
-        layer
-      );
-
-    }
-
-  });
-
-  MAP_LAYERS[cfg.id] = layer;
-
-  // =====================================================
-  // ADICIONA AO MAPA
-  // =====================================================
-
-  if (cfg.visible) {
-
-    layer.addTo(map);
-
-    // =====================================================
-    // ZOOM AUTOMÁTICO
-    // =====================================================
-
-    try {
-
-      const bounds =
-        layer.getBounds();
-
-      if (
-        bounds &&
-        bounds.isValid() &&
-        !firstLayerLoaded
-      ) {
-
-        firstLayerLoaded = true;
-
-        map.fitBounds(bounds);
-
-      }
-
-    } catch (err) {
-
-      console.warn(
-        'Erro bounds:',
-        err
-      );
-
-    }
-
-  }
-
-}
-
-// =====================================================
-// POPUPS
-// =====================================================
-
-function bindLayerEvents(
-  cfg,
-  feature,
-  layer
-) {
-
-  const props =
-    feature.properties || {};
-
-  let html = `
-    <div class="popup-title">
-      ${cfg.icon} ${cfg.name}
+// Função para inicializar todas as camadas
+async function initLayers() {
+  const layerControlsDiv = document.getElementById('layer-controls');
+  if (!layerControlsDiv) return;
+  
+  // Gerar os controles (checkboxes) na sidebar
+  layerControlsDiv.innerHTML = LAYER_CONFIG.map(layer => `
+    <div class="layer-item">
+      <input type="checkbox" class="layer-toggle" id="toggle-${layer.id}" data-id="${layer.id}">
+      <div class="layer-dot" style="background-color: ${layer.color};"></div>
+      <span class="layer-name">${layer.name}</span>
+      <span class="layer-count">0</span>
     </div>
-  `;
-
-  cfg.popupFields.forEach(field => {
-
-    if (
-      props[field] !== undefined &&
-      props[field] !== null
-    ) {
-
-      html += `
-        <div class="popup-row">
-
-          <div class="popup-key">
-            ${formatKey(field)}
-          </div>
-
-          <div class="popup-val">
-            ${props[field]}
-          </div>
-
-        </div>
-      `;
-
+  `).join('');
+  
+  // Carregar cada camada (inicialmente invisível, exceto UF?)
+  for (const config of LAYER_CONFIG) {
+    // A UF pode vir visível por padrão, se quiser
+    const defaultVisible = (config.id === 'uf_am');
+    const layer = await loadFlatGeobufLayer(config, defaultVisible);
+    if (layer && config.id === 'uf_am') {
+      map.fitBounds(layer.getBounds());
     }
-
+    // Atualizar contador de features depois de carregar
+    if (layer) {
+      updateLayerCount(config.id, layer);
+    }
+  }
+  
+  // Adicionar eventos aos checkboxes após carregar
+  document.querySelectorAll('.layer-toggle').forEach(checkbox => {
+    checkbox.addEventListener('change', (e) => {
+      const layerId = checkbox.dataset.id;
+      const layer = loadedLayers[layerId];
+      if (layer) {
+        if (checkbox.checked) {
+          layer.addTo(map);
+          updateDashboard(); // atualiza dashboard quando camada é adicionada
+        } else {
+          map.removeLayer(layer);
+          updateDashboard();
+        }
+      }
+    });
   });
-
-  layer.bindPopup(html);
-
-  layer.on('mouseover', () => {
-
-    map.getContainer().style.cursor =
-      'pointer';
-
-  });
-
-  layer.on('mouseout', () => {
-
-    map.getContainer().style.cursor =
-      '';
-
-  });
-
 }
 
-// =====================================================
-// FORMATADOR
-// =====================================================
+// Atualiza o contador de features (exibido ao lado do nome da camada)
+function updateLayerCount(layerId, layer) {
+  const countSpan = document.querySelector(`#toggle-${layerId}`)?.closest('.layer-item')?.querySelector('.layer-count');
+  if (countSpan && layer) {
+    let count = 0;
+    layer.eachLayer(() => count++);
+    countSpan.textContent = count;
+  }
+}
 
-function formatKey(key) {
-
-  return key
-
-    .replace(/_/g, ' ')
-    .toLowerCase()
-    .replace(/\b\w/g,
-      l => l.toUpperCase()
-    );
-
+// Chamar initLayers quando o mapa estiver pronto
+if (typeof map !== 'undefined') {
+  // Aguarda o mapa ser inicializado em map.js
+  document.addEventListener('DOMContentLoaded', () => {
+    // Pequeno delay para garantir que o mapa global existe
+    setTimeout(() => {
+      if (window.map) initLayers();
+      else console.warn('Mapa não encontrado');
+    }, 200);
+  });
 }
